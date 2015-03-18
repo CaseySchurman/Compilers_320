@@ -1,10 +1,10 @@
 //*******************************************************
 // Purpose: main program for lang compiler
 //
-// Author: Casey Schurman
-// Email:  casey.schurman@oit.edu
+// Author: Philip Howard
+// Email:  phil.howard@oit.edu
 //
-// Date: 2/28/2015
+// Date: 2/20/2015
 //
 //*******************************************************
 #include <stdio.h>
@@ -12,6 +12,7 @@
 #include <iostream>
 #include <fstream>
 #include "lex.h"
+#include "codegen.h"
 
 extern cAstNode *yyast_root;
 
@@ -21,7 +22,7 @@ int main(int argc, char **argv)
 
     const char *outfile_name;
     int result = 0;
-    std::streambuf *cout_buf = std::cout.rdbuf();
+//    std::streambuf *cout_buf = std::cout.rdbuf();
 
     // setup input file from argv[1]
     if (argc > 1)
@@ -29,7 +30,7 @@ int main(int argc, char **argv)
         yyin = fopen(argv[1], "r");
         if (yyin == NULL)
         {
-            std::cout << "ERROR: Unable to open file " << argv[1] << "\n";
+            std::cerr << "ERROR: Unable to open file " << argv[1] << "\n";
             exit(-1);
         }
     }
@@ -45,26 +46,30 @@ int main(int argc, char **argv)
     std::ofstream output(outfile_name);
     if (!output.is_open())
     {
-        std::cout << "ERROR: Unable to open file " << outfile_name << "\n";
+        std::cerr << "ERROR: Unable to open file " << outfile_name << "\n";
         exit(-1);
     }
 
     // redirect cout to the output file
-    std::cout.rdbuf(output.rdbuf());
+    //std::cerr.rdbuf(output.rdbuf());
 
     symbolTableRoot = cSymbolTable::CreateDefaultTable();
     result = yyparse();
     if (result == 0)
     {
+        //std::cout << yyast_root->toString() << std::endl;
         yyast_root->ComputeOffsets(0);
-        std::cout << yyast_root->toString() << std::endl;
+        output << yyast_root->toString() << std::endl;
+        InitOutput("langout.c");
+        yyast_root->GenerateCode();
+        FinalizeOutput();
     } else {
-        std::cout << yynerrs << " Errors in compile" << std::endl;
+        std::cerr << yynerrs << " Errors in compile" << std::endl;
     }
 
     // clean up cout so it points back to standard location
     output.close();
-    std::cout.rdbuf(cout_buf);
+    //std::cerr.rdbuf(cout_buf);
 
     return result;
 }

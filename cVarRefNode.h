@@ -126,6 +126,18 @@ class cVarRefNode : public cExprNode
         
         return base;
     }
+    
+    void GenerateCode()
+    {
+        if(mList->back()->GetDecl()->IsFloat())
+        {
+            EmitString("(*(double *)(&Memory[(Frame_Pointer + " + std::to_string(mOffset) + ")]))");
+        }
+        else if(mList->back()->GetDecl()->IsInt())
+        {
+            EmitString("(*(int *)(&Memory[(Frame_Pointer + " + std::to_string(mOffset) + ")]))");
+        }
+    }
 
   protected:
     std::string mName;

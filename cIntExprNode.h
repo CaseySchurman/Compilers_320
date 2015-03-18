@@ -18,7 +18,7 @@
 class cIntExprNode : public cExprNode
 {
   public:
-    cIntExprNode(int value) : cExprNode()
+    cIntExprNode(int value)
     { mIntVal = value; }
 
     // return integer constant value
@@ -42,6 +42,11 @@ class cIntExprNode : public cExprNode
         result += ")";
 
         return result;
+    }
+    
+    void GenerateCode()
+    {
+        EmitInt(mIntVal);
     }
 
   protected:

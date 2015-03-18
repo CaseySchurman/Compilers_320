@@ -55,7 +55,27 @@ class cFuncCallNode : public cExprNode
 
         return base;
     }
-
+    
+    void GenerateCode()
+    {
+        /*Wasn't working*/
+        //EmitString("(*(int *)(&Memory[(Stack_Pointer)])) = Frame_Pointer;\n");
+        //EmitString("Stack_Pointer += 4;\n");
+            
+        //if (mParams != nullptr)
+        //{
+        //    mParams->GenerateCode();
+        //}    
+            
+        //EmitString("Frame_Pointer = Stack_Pointer - " + std::to_string(mParams->NumParams()) + ";\n");
+                
+        //EmitString(mId->Name() + "_" + std::to_string(mId->GetSequence()) + "();\n");
+        
+        /*So did this*/
+        EmitString(mId->Name());
+        EmitString("();\n");
+    }
+    
   protected:
     cSymbol *mId;           // name of the function
     cParamNode *mParams;    // params passed to the function

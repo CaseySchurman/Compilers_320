@@ -69,6 +69,24 @@ class cBlockNode : public cStmtNode
         
         return base;
     }
+    
+    void GenerateCode()
+    {
+        if(mDecls != nullptr)
+        {
+            mDecls->GenerateCode();
+            EmitString("Stack_Pointer += " + std::to_string(mSize) + ";\n");
+        }
+        if(mStmts != nullptr)
+        {
+            mStmts->GenerateCode();
+        }
+        
+        if (mDecls != nullptr)
+        {
+            EmitString("Stack_Pointer -= " + std::to_string(mSize) + ";\n");
+        }
+    }
 
   protected:
     cDeclsNode *mDecls;     // declarations

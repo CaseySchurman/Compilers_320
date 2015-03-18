@@ -56,6 +56,16 @@ class cStmtsNode : public cAstNode
         
         return offset;
     }
+    
+    void GenerateCode()
+    {
+        list<cStmtNode *>::iterator it = mList->begin();
+      
+        for(;it != mList->end(); it++)
+        {
+            (*it)->GenerateCode();
+        }
+    }
 
   protected:
     list<cStmtNode *> *mList;   // list of statements

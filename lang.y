@@ -181,6 +181,15 @@ stmt:       IF '(' expr ')' stmt ELSE stmt
         |   block               { $$ = $1; }
         |   RETURN expr ';'     { $$ = new cReturnNode($2); }
         |   error ';'           { $$ = NULL; }
+        |   lval '=' func_call ';'
+                                { $$ = new cAssignNode((cVarRefNode*)$1, $3);
+                                    
+                                  if ($$->SemanticError())
+                                  {
+                                      semantic_error("failed value function assignment");
+                                      $$ = nullptr;
+                                  }
+                                }
 
 func_call:  IDENTIFIER '(' params ')' 
                                 { $$ = new cFuncCallNode($1, $3); }
@@ -225,11 +234,11 @@ term:       term '*' fact       { $$ = new cBinaryExprNode($1, '*', $3); }
         |   term '%' fact       { $$ = new cBinaryExprNode($1, '%', $3); }
         |   fact                { $$ = $1; }
 
-fact:        '(' expr ')'       { $$ = $2; }
+fact:       '(' expr ')'        { $$ = $2; }
         |   INT_VAL             { $$ = new cIntExprNode($1); }
         |   FLOAT_VAL           { $$ = new cFloatExprNode($1); }
         |   varref              { $$ = $1; }
-        |   func_call           { $$ = $1; }
+        //|   func_call           { $$ = $1; }
 
 %%
 

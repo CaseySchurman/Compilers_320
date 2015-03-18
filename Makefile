@@ -4,6 +4,7 @@ OBJS=main.o \
 	 cSymbolTable.o \
 	 cDeclNode.o \
 	 langparse.o \
+	 codegen.o
 
 all: lang
 

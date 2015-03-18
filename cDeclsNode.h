@@ -66,6 +66,16 @@ class cDeclsNode : public cAstNode
 
         return result;
     }
+    
+    virtual void GenerateCode()
+    {
+        list<cDeclNode *>::iterator it = mList->begin();
+      
+        for(;it != mList->end(); it++)
+        {
+            (*it)->GenerateCode();
+        }
+    }
 
   protected:
     list<cDeclNode *> *mList;       // list of delcarations

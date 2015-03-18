@@ -26,6 +26,9 @@ class cSymbol
 
         // return the name of the symbol
         std::string Name() {return name;}
+        
+        // return unique ID for symbol
+        int GetSequence()  {return sequence;}
 
         // Indicate what type of thing this symbol is
         void SetType(cDeclNode *type)

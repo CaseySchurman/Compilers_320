@@ -11,6 +11,7 @@
 
 #include <iostream>
 #include <string>
+#include "codegen.h"
 
 class cAstNode
 {
@@ -29,6 +30,9 @@ class cAstNode
 
     // return true if a semantic error was detected in this node
     virtual bool SemanticError() { return mSemanticError; }
+    
+    virtual void GenerateCode()
+    {}
 
   protected:
     bool mSemanticError;        // true indicates this node has a semantic error

@@ -42,17 +42,34 @@ class cAssignNode : public cStmtNode
     
     int ComputeOffsets(int base)
     {
-      if(mLval != nullptr)
-      {
-          mLval->ComputeOffsets(base);
-      }
+        if(mLval != nullptr)
+        {
+            mLval->ComputeOffsets(base);
+        }
       
-      if(mExpr != nullptr)
-      {
-          mExpr->ComputeOffsets(base);
-      }
+        if(mExpr != nullptr)
+        {
+            mExpr->ComputeOffsets(base);
+        }
       
-      return base;
+        return base;
+    }
+    
+    void GenerateCode()
+    {
+        if(mLval != nullptr)
+        {
+            mLval->GenerateCode();
+        }
+        
+        EmitString(" = ");
+        
+        if(mExpr != nullptr)
+        {
+            mExpr->GenerateCode();
+        }
+      
+        EmitString(";\n");
     }
 
   protected:
